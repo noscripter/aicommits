@@ -60,6 +60,8 @@ export default async (
 			type: commitType?.toString(),
 		});
 
+		console.log(`config: ${JSON.stringify(config)}`);
+
 		const s = spinner();
 		s.start('The AI is analyzing your changes');
 		let messages: string[];
@@ -73,7 +75,9 @@ export default async (
 				config['max-length'],
 				config.type,
 				config.timeout,
-				config.proxy
+				config.proxy,
+				config.retries,
+				config['insecure-tls']
 			);
 		} finally {
 			s.stop('Changes analyzed');

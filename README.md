@@ -213,6 +213,26 @@ Default: `10000` (10 seconds)
 aicommits config set timeout=20000 # 20s
 ```
 
+#### retries
+
+The number of retry attempts for failed network requests.
+
+Default: `2`
+
+```sh
+aicommits config set retries=3
+```
+
+#### insecure-tls
+
+Disable TLS certificate verification. Use with caution - only enable this if you're having TLS connection issues in corporate environments with SSL inspection.
+
+Default: `false`
+
+```sh
+aicommits config set insecure-tls=true
+```
+
 #### max-length
 
 The maximum character length of the generated commit message.
@@ -244,6 +264,10 @@ aicommits config set type=
 This CLI tool runs `git diff` to grab all your latest code changes, sends them to OpenAI's GPT-3, then returns the AI generated commit message.
 
 Video coming soon where I rebuild it from scratch to show you how to easily build your own CLI tools powered by AI.
+
+## Troubleshooting
+
+If you're experiencing network connection issues, TLS errors, or other connectivity problems, please refer to our [Troubleshooting Guide](TROUBLESHOOTING.md) for detailed solutions.
 
 ## Maintainers
 

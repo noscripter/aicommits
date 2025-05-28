@@ -48,7 +48,9 @@ export default () =>
 				config['max-length'],
 				config.type,
 				config.timeout,
-				config.proxy
+				config.proxy,
+				config.retries,
+				config['insecure-tls']
 			);
 		} finally {
 			s.stop('Changes analyzed');
