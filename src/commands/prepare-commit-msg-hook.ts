@@ -49,6 +49,8 @@ export default () => (async () => {
 			config.type,
 			config.timeout,
 			config.proxy,
+			config.retries,
+			config['insecure-tls'],
 		);
 	} finally {
 		s.stop('Changes analyzed');

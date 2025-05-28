@@ -104,6 +104,28 @@ const configParsers = {
 
 		return parsed;
 	},
+	retries(retries?: string) {
+		if (!retries) {
+			return 2;
+		}
+
+		parseAssert('retries', /^\d+$/.test(retries), 'Must be an integer');
+
+		const parsed = Number(retries);
+		parseAssert('retries', parsed >= 0, 'Must be greater than or equal to 0');
+		parseAssert('retries', parsed <= 5, 'Must be less than or equal to 5');
+
+		return parsed;
+	},
+	'insecure-tls'(insecureTls?: string) {
+		if (!insecureTls) {
+			return false;
+		}
+
+		parseAssert('insecure-tls', /^(true|false)$/i.test(insecureTls), 'Must be true or false');
+
+		return insecureTls.toLowerCase() === 'true';
+	},
 } as const;
 
 type ConfigKeys = keyof typeof configParsers;
