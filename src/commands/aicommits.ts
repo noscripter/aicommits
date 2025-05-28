@@ -64,6 +64,8 @@ export default async (
 			config.type,
 			config.timeout,
 			config.proxy,
+			config.retries,
+			config['insecure-tls'],
 		);
 	} finally {
 		s.stop('Changes analyzed');
@@ -95,7 +97,7 @@ export default async (
 			return;
 		}
 
-		message = selected;
+		message = selected as string;
 	}
 
 	await execa('git', ['commit', '-m', message, ...rawArgv]);
