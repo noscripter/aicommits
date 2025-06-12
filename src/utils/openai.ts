@@ -5,7 +5,7 @@ import {
 	type TiktokenModel,
 	// encoding_for_model,
 } from '@dqbd/tiktoken';
-import createHttpsProxyAgent from 'https-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { KnownError } from './error.js';
 import type { CommitType } from './config.js';
 import { generatePrompt } from './prompt.js';
@@ -37,7 +37,7 @@ const httpsPost = async (
 			timeout,
 			agent: (
 				proxy
-					? createHttpsProxyAgent(proxy)
+					? new HttpsProxyAgent(proxy)
 					: undefined
 			),
 		},
@@ -163,7 +163,7 @@ export const generateCommitMessage = async (
 		return deduplicateMessages(
 			completion.choices
 				.filter(choice => choice.message?.content)
-				.map(choice => sanitizeMessage(choice.message!.content)),
+				.map(choice => sanitizeMessage(choice.message!.content!)),
 		);
 	} catch (error) {
 		const errorAsAny = error as any;

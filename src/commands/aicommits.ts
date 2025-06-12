@@ -19,6 +19,7 @@ export default async (
 	excludeFiles: string[],
 	stageAll: boolean,
 	commitType: string | undefined,
+	autoAccept: boolean,
 	rawArgv: string[],
 ) => (async () => {
 	intro(bgCyan(black(' aicommits ')));
@@ -50,6 +51,9 @@ export default async (
 		type: commitType?.toString(),
 	});
 
+	// Use CLI flag or config setting for auto-accept
+	const shouldAutoAccept = autoAccept || config['auto-accept'];
+
 	const s = spinner();
 	s.start('The AI is analyzing your changes');
 	let messages: string[];
@@ -76,26 +80,38 @@ export default async (
 	let message: string;
 	if (messages.length === 1) {
 		[message] = messages;
-		const confirmed = await confirm({
-			message: `Use this commit message?\n\n   ${message}\n`,
-		});
+		
+		if (shouldAutoAccept) {
+			// Skip confirmation when auto-accept is enabled
+			console.log(`Using commit message: ${message}`);
+		} else {
+			const confirmed = await confirm({
+				message: `Use this commit message?\n\n   ${message}\n`,
+			});
 
-		if (!confirmed || isCancel(confirmed)) {
-			outro('Commit cancelled');
-			return;
+			if (!confirmed || isCancel(confirmed)) {
+				outro('Commit cancelled');
+				return;
+			}
 		}
 	} else {
-		const selected = await select({
-			message: `Pick a commit message to use: ${dim('(Ctrl+c to exit)')}`,
-			options: messages.map(value => ({ label: value, value })),
-		});
+		if (shouldAutoAccept) {
+			// Use the first message when auto-accept is enabled and multiple messages exist
+			[message] = messages;
+			console.log(`Auto-selecting first commit message: ${message}`);
+		} else {
+			const selected = await select({
+				message: `Pick a commit message to use: ${dim('(Ctrl+c to exit)')}`,
+				options: messages.map(value => ({ label: value, value })),
+			});
 
-		if (isCancel(selected)) {
-			outro('Commit cancelled');
-			return;
+			if (isCancel(selected)) {
+				outro('Commit cancelled');
+				return;
+			}
+
+			message = selected as string;
 		}
-
-		message = selected;
 	}
 
 	await execa('git', ['commit', '-m', message, ...rawArgv]);
