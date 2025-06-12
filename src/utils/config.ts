@@ -104,6 +104,15 @@ const configParsers = {
 
 		return parsed;
 	},
+	'auto-accept'(autoAccept?: string) {
+		if (!autoAccept) {
+			return false;
+		}
+
+		parseAssert('auto-accept', ['true', 'false'].includes(autoAccept.toLowerCase()), 'Must be true or false');
+		
+		return autoAccept.toLowerCase() === 'true';
+	},
 } as const;
 
 type ConfigKeys = keyof typeof configParsers;

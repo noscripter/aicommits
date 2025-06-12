@@ -40,6 +40,12 @@ cli(
 				description: 'Type of commit message to generate',
 				alias: 't',
 			},
+			yes: {
+				type: Boolean,
+				description: 'Skip confirmation prompts and automatically accept the first commit message',
+				alias: 'y',
+				default: false,
+			},
 		},
 
 		commands: [
@@ -62,6 +68,7 @@ cli(
 				argv.flags.exclude,
 				argv.flags.all,
 				argv.flags.type,
+				argv.flags.yes,
 				rawArgv,
 			);
 		}
